@@ -17,7 +17,7 @@ public class TileController : MonoBehaviour {
 	private SpriteRenderer spriteRenderer;
 	private SpriteRenderer numberRenderer;
 	private bool isMouseOver = false;
-
+	public bool isClickable = true;
 
 	void Start() {
 		// Get the sprite renderer and number renderer components
@@ -64,16 +64,19 @@ public class TileController : MonoBehaviour {
 
 	// When the mouse enters the tile
 	void OnMouseEnter() {
-		isMouseOver = true;
-		// Change the sprite color to indicate that the tile is being hovered over
-		spriteRenderer.color = new Color(0.9f, 0.95f, 1f);
+		if (isClickable) {
+			isMouseOver = true;
+			// Change the sprite color to indicate that the tile is being hovered over
+			spriteRenderer.color = new Color(0.9f, 0.95f, 1f);
+		}
 	}
 
 	// When the mouse exits the tile
 	void OnMouseExit() {
-		isMouseOver = false;
-		// Reset the sprite color to white
-		spriteRenderer.color = new Color(1, 1, 1);
+		if (isClickable) {
+			isMouseOver = false;
+			// Reset the sprite color to white
+			spriteRenderer.color = new Color(1, 1, 1);
+		}
 	}
-
 }

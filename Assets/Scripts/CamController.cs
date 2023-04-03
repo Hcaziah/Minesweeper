@@ -20,7 +20,6 @@ public class CamController : MonoBehaviour {
 		if (scroll != 0f) {
 			zoomLevel -= scroll * 500f * Time.deltaTime; // Adjust the zoom level based on the mouse scroll input
 			zoomLevel = Mathf.Clamp(zoomLevel, 1f, 6f); // Clamp the zoom level to a minimum of 1 and a maximum of 6
-			Camera.main.orthographicSize = zoomLevel; // Set the camera's orthographic size based on the zoom level
 		}
 
 		// Set the camera's orthographic size based on the zoom level
