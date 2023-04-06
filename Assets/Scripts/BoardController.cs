@@ -3,8 +3,8 @@ using UnityEngine.Tilemaps;
 
 public class BoardController : MonoBehaviour {
 	[SerializeField] private GameObject tilePrefab;
+	private Vector2 tileSize, boardSize;
 	public GameObject[,] tiles;
-	public Vector2 tileSize, boardSize;
 	public Vector2Int numTiles;
 	public int numTotalTiles = 0;
 	public int numberMines = 0;

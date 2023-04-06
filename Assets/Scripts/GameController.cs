@@ -29,12 +29,12 @@ public class GameController : MonoBehaviour {
 		mainStats.GetComponentsInChildren<TMP_Text>()[1].SetText(String.Format(":{0:00}", (boardController.numberMines - boardController.numFlags).ToString()));
 		// If the player has won, stop the timer and disable the tiles
 		if (boardController.CheckWin()) {
-			if (gameRunning) winState();
+			if (gameRunning) endState("You Win!");
 			stopGame();
 		}
 		// If the player has lost, stop the timer and disable the tiles
 		if (boardController.CheckLose()) {
-			if (gameRunning) loseState();
+			if (gameRunning) endState("You Lose!");
 			stopGame();
 		}
 	}
@@ -47,17 +47,10 @@ public class GameController : MonoBehaviour {
 			}
 		}
 	}
-	void winState() {
-		endScreen.GetComponentInChildren<TMP_Text>().SetText("You Win!");
-		endScreen.GetComponentsInChildren<TMP_Text>()[1].SetText(String.Format("{0:00}:{1:00}", minutes, seconds));
-		endScreen.GetComponentsInChildren<TMP_Text>()[2].SetText(String.Format("[{0:0}, {1:0}] with {2:00} mines", boardController.numTiles.x, boardController.numTiles.y, boardController.numberMines));
-		endScreen.gameObject.SetActive(true);
-	}
-	void loseState() {
-		endScreen.GetComponentInChildren<TMP_Text>().SetText("You Lose!");
+	void endState(String text) {
+		endScreen.GetComponentInChildren<TMP_Text>().SetText(text);
 		endScreen.GetComponentsInChildren<TMP_Text>()[1].SetText(String.Format("{0:00}:{1:00}", minutes, seconds));
 		endScreen.GetComponentsInChildren<TMP_Text>()[2].SetText(String.Format("[{0:0}, {1:0}] with {2:00} mines", boardController.numTiles.x, boardController.numTiles.y, boardController.numberMines));
 		endScreen.gameObject.SetActive(true);
 	}
 }
-
