@@ -5,10 +5,9 @@ public class BoardController : MonoBehaviour {
 	[SerializeField] private GameObject tilePrefab;
 	public GameObject[,] tiles;
 	public Vector2 tileSize, boardSize;
-	public int numTilesX = 10;
-	public int numTilesY = 10;
-	public int numTiles = 0;
-	public int numberMines = 10;
+	public Vector2Int numTiles;
+	public int numTotalTiles = 0;
+	public int numberMines = 0;
 	public Vector2Int[] mineArray;
 	public int numFlags = 0;
 
@@ -24,6 +23,11 @@ public class BoardController : MonoBehaviour {
 		};
 
 	void Start() {
+		// Get input values
+		numTiles.x = PlayerPrefs.GetInt("x");
+		numTiles.y = PlayerPrefs.GetInt("y");
+		numberMines = PlayerPrefs.GetInt("numMines");
+
 		SetupBoard();
 	}
 
@@ -35,26 +39,23 @@ public class BoardController : MonoBehaviour {
 	}
 
 	void SetupBoard() {
-		numTiles = numTilesX * numTilesY;
+		numTotalTiles = numTiles.x * numTiles.y;
 		boardSize = transform.GetComponent<Renderer>().bounds.size;
-		tileSize = new Vector2(boardSize.x / (numTilesX), boardSize.y / (numTilesY));
+		tileSize = new Vector2(boardSize.x / (numTiles.x), boardSize.y / (numTiles.y));
 
 		// Initiate cellArray
-		tiles = new GameObject[numTilesX, numTilesY];
+		tiles = new GameObject[numTiles.x, numTiles.y];
 
 		Vector2 startingPosition = new Vector2((boardSize.x / 2) - (tileSize.x / 2), (boardSize.y / 2) - (tileSize.y / 2));
 
-		int numberXLines = numTilesX + 1;
-		int numberYLines = numTilesY + 1;
-
 		// Create tile grid of tile Gameobjects
-		for (int x = 0; x < numTilesX; x++) {
-			for (int y = 0; y < numTilesY; y++) {
+		for (int x = 0; x < numTiles.x; x++) {
+			for (int y = 0; y < numTiles.y; y++) {
 				// Instantiate a new tile at the current position
 				GameObject tile = Instantiate(tilePrefab, new Vector2((x * tileSize.x) - startingPosition.x, (y * tileSize.y) - startingPosition.y), Quaternion.identity);
 				tile.transform.parent = transform;
 				// Scale the tile so that it takes up the entire board
-				tile.transform.localScale = new Vector2(1f / numTilesX, 1f / numTilesY);
+				tile.transform.localScale = new Vector2(1f / numTiles.x, 1f / numTiles.y);
 				// Inform tile of its position
 				tile.GetComponent<TileController>().tilePos = new Vector2Int(x, y);
 				// Store the tile in the cells array
@@ -64,13 +65,13 @@ public class BoardController : MonoBehaviour {
 
 		// Place mines
 		int numMines = numberMines;
-		// Initate mineArray
+		// Initiate mineArray
 		mineArray = new Vector2Int[numberMines];
 
 		while (numMines > 0) {
 			// Choose a random position on the board
-			int x = Random.Range(0, numTilesX);
-			int y = Random.Range(0, numTilesY);
+			int x = Random.Range(0, numTiles.x);
+			int y = Random.Range(0, numTiles.y);
 
 			if (!tiles[x, y].GetComponent<TileController>().isMine) {
 				// Place a mine on the tile at the chosen position
@@ -81,7 +82,7 @@ public class BoardController : MonoBehaviour {
 				for (int i = 0; i < neighborPoints.Length; i++) {
 					Vector2Int point = neighborPoints[i];
 					// Increment the number of adjacent mines for each neighboring tile
-					if (point.x + x >= 0 && point.x + x < numTilesX && point.y + y >= 0 && point.y + y < numTilesY)
+					if (point.x + x >= 0 && point.x + x < numTiles.x && point.y + y >= 0 && point.y + y < numTiles.y)
 						tiles[point.x + x, point.y + y].GetComponent<TileController>().numAdjacentMines++;
 				}
 				numMines--;
@@ -90,8 +91,8 @@ public class BoardController : MonoBehaviour {
 	}
 	void CountFlags() {
 		int sum = 0;
-		for (int x = 0; x < numTilesX; x++) {
-			for (int y = 0; y < numTilesY; y++) {
+		for (int x = 0; x < numTiles.x; x++) {
+			for (int y = 0; y < numTiles.y; y++) {
 				if (tiles[x, y].GetComponent<TileController>().isFlagged) sum++;
 				if (sum >= numberMines) break; // Break out of the loop if we've found all the mines (no need to keep counting)
 			}
@@ -104,8 +105,8 @@ public class BoardController : MonoBehaviour {
 	// Clear out empty tiles (tiles with no adjacent mines)
 	void ClearEmptyTiles() {
 		// Loop through all the cells in the grid
-		for (int x = 0; x < numTilesX; x++) {
-			for (int y = 0; y < numTilesY; y++) {
+		for (int x = 0; x < numTiles.x; x++) {
+			for (int y = 0; y < numTiles.y; y++) {
 				// Get the TileController component of the current cell
 				TileController currentTile = tiles[x, y].GetComponent<TileController>();
 
@@ -120,7 +121,7 @@ public class BoardController : MonoBehaviour {
 						int neighborY = y + point.y;
 
 						// Check if the neighboring cell is within the bounds of the grid
-						if (neighborX >= 0 && neighborX < numTilesX && neighborY >= 0 && neighborY < numTilesY) {
+						if (neighborX >= 0 && neighborX < numTiles.x && neighborY >= 0 && neighborY < numTiles.y) {
 							// Get the TileController component of the neighboring cell
 							TileController neighborCell = tiles[neighborX, neighborY].GetComponent<TileController>();
 
@@ -139,8 +140,8 @@ public class BoardController : MonoBehaviour {
 	// Check if the player has won
 	public bool CheckWin() {
 		// Loop through all the cells in the grid
-		for (int x = 0; x < numTilesX; x++) {
-			for (int y = 0; y < numTilesY; y++) {
+		for (int x = 0; x < numTiles.x; x++) {
+			for (int y = 0; y < numTiles.y; y++) {
 				// Get the TileController component of the current cell
 				TileController currentTile = tiles[x, y].GetComponent<TileController>();
 
@@ -156,8 +157,8 @@ public class BoardController : MonoBehaviour {
 	}
 	public bool CheckLose() {
 		// Loop through all the cells in the grid
-		for (int x = 0; x < numTilesX; x++) {
-			for (int y = 0; y < numTilesY; y++) {
+		for (int x = 0; x < numTiles.x; x++) {
+			for (int y = 0; y < numTiles.y; y++) {
 				// Get the TileController component of the current cell
 				TileController currentTile = tiles[x, y].GetComponent<TileController>();
 

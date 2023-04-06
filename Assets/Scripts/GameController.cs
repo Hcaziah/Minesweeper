@@ -41,8 +41,8 @@ public class GameController : MonoBehaviour {
 	// Stop the game
 	void stopGame() {
 		gameRunning = false;
-		for (int x = 0; x < boardController.numTilesX; x++) {
-			for (int y = 0; y < boardController.numTilesY; y++) {
+		for (int x = 0; x < boardController.numTiles.x; x++) {
+			for (int y = 0; y < boardController.numTiles.y; y++) {
 				boardController.tiles[x, y].GetComponent<TileController>().isClickable = false;
 			}
 		}
@@ -50,13 +50,13 @@ public class GameController : MonoBehaviour {
 	void winState() {
 		endScreen.GetComponentInChildren<TMP_Text>().SetText("You Win!");
 		endScreen.GetComponentsInChildren<TMP_Text>()[1].SetText(String.Format("{0:00}:{1:00}", minutes, seconds));
-		endScreen.GetComponentsInChildren<TMP_Text>()[2].SetText(String.Format("[{0:0}, {1:0}] with {2:00} mines", boardController.numTilesX, boardController.numTilesY, boardController.numberMines));
+		endScreen.GetComponentsInChildren<TMP_Text>()[2].SetText(String.Format("[{0:0}, {1:0}] with {2:00} mines", boardController.numTiles.x, boardController.numTiles.y, boardController.numberMines));
 		endScreen.gameObject.SetActive(true);
 	}
 	void loseState() {
 		endScreen.GetComponentInChildren<TMP_Text>().SetText("You Lose!");
 		endScreen.GetComponentsInChildren<TMP_Text>()[1].SetText(String.Format("{0:00}:{1:00}", minutes, seconds));
-		endScreen.GetComponentsInChildren<TMP_Text>()[2].SetText(String.Format("[{0:0}, {1:0}] with {2:00} mines", boardController.numTilesX, boardController.numTilesY, boardController.numberMines));
+		endScreen.GetComponentsInChildren<TMP_Text>()[2].SetText(String.Format("[{0:0}, {1:0}] with {2:00} mines", boardController.numTiles.x, boardController.numTiles.y, boardController.numberMines));
 		endScreen.gameObject.SetActive(true);
 	}
 }
