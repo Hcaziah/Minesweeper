@@ -21,9 +21,9 @@ public class BoardControllerV2 : MonoBehaviour {
 	};
 	// Start is called before the first frame update
 	void Start() {
-		// tileSizing.x = PlayerPrefs.GetInt("numTilesX");
-		// tileSizing.y = PlayerPrefs.GetInt("numTilesY");
-		// numTotalMines = PlayerPrefs.GetInt("numMines");
+		tileArraySize.x = PlayerPrefs.GetInt("numTilesX");
+		tileArraySize.y = PlayerPrefs.GetInt("numTilesY");
+		numTotalMines = PlayerPrefs.GetInt("numMines");
 
 		SetupBoard();
 	}
