@@ -5,6 +5,7 @@ using UnityEngine;
 public class CamController : MonoBehaviour {
 	private float zoomLevel = 6f;
 	private float moveSpeed = 5f;
+	[SerializeField] private float dragSpeed = 1f;
 
 	// Start is called before the first frame update
 	void Start() {
@@ -13,6 +14,15 @@ public class CamController : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update() {
+		// If the middle mouse button is held down, drag the camera
+		if (Input.GetMouseButton(2)) {
+			// Get the mouse input
+			float mouseX = Input.GetAxis("Mouse X");
+			float mouseY = Input.GetAxis("Mouse Y");
+
+			// Move the camera in the opposite direction of the mouse input
+			transform.position -= new Vector3(mouseX, mouseY, 0f) * dragSpeed * Time.deltaTime;
+		}
 		// Get the scroll input from the mouse wheel
 		float scroll = Input.GetAxis("Mouse ScrollWheel");
 

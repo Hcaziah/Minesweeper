@@ -10,6 +10,7 @@ public class BoardController : MonoBehaviour {
 	public int numberMines = 0;
 	public Vector2Int[] mineArray;
 	public int numFlags = 0;
+	private bool firstTileClicked = false;
 
 	private Vector2Int[] neighborPoints = new Vector2Int[] {
 			new Vector2Int(-1, -1),
@@ -24,9 +25,9 @@ public class BoardController : MonoBehaviour {
 
 	void Start() {
 		// Get input values
-		numTiles.x = PlayerPrefs.GetInt("x");
-		numTiles.y = PlayerPrefs.GetInt("y");
-		numberMines = PlayerPrefs.GetInt("numMines");
+		// numTiles.x = PlayerPrefs.GetInt("x");
+		// numTiles.y = PlayerPrefs.GetInt("y");
+		// numberMines = PlayerPrefs.GetInt("numMines");
 
 		SetupBoard();
 	}
@@ -36,10 +37,12 @@ public class BoardController : MonoBehaviour {
 		// Count the number of flagged tiles
 		CountFlags();
 		ClearEmptyTiles();
+		if (firstTileClicked) {
+			PlaceMines();
+		}
 	}
 
 	void SetupBoard() {
-		numTotalTiles = numTiles.x * numTiles.y;
 		boardSize = transform.GetComponent<Renderer>().bounds.size;
 		tileSize = new Vector2(boardSize.x / (numTiles.x), boardSize.y / (numTiles.y));
 
@@ -62,7 +65,9 @@ public class BoardController : MonoBehaviour {
 				tiles[x, y] = tile;
 			}
 		}
+	}
 
+	void PlaceMines() {
 		// Place mines
 		int numMines = numberMines;
 		// Initiate mineArray
@@ -73,7 +78,7 @@ public class BoardController : MonoBehaviour {
 			int x = Random.Range(0, numTiles.x);
 			int y = Random.Range(0, numTiles.y);
 
-			if (!tiles[x, y].GetComponent<TileController>().isMine) {
+			if (!tiles[x, y].GetComponent<TileController>().isMine && !tiles[x, y].GetComponent<TileController>().isRevealed) {
 				// Place a mine on the tile at the chosen position
 				tiles[x, y].GetComponent<TileController>().isMine = true;
 				// Add mines location to mineArray, reverse order because why not.
@@ -89,6 +94,7 @@ public class BoardController : MonoBehaviour {
 			}
 		}
 	}
+
 	void CountFlags() {
 		int sum = 0;
 		for (int x = 0; x < numTiles.x; x++) {
@@ -99,8 +105,6 @@ public class BoardController : MonoBehaviour {
 		}
 		numFlags = sum;
 	}
-
-	// Set numTiles and board size
 
 	// Clear out empty tiles (tiles with no adjacent mines)
 	void ClearEmptyTiles() {

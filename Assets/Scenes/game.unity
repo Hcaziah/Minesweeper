@@ -181,7 +181,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Remaing\n mines
+  m_text: Remaing\nflags
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1c0d97487dad5f34d9a49cf103cdd5d1, type: 2}
   m_sharedMaterial: {fileID: -413401811321942985, guid: 1c0d97487dad5f34d9a49cf103cdd5d1, type: 2}
@@ -593,6 +593,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eefbd413e50c9ec49ba845a56030cd9e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dragSpeed: 1
 --- !u!1 &519995951
 GameObject:
   m_ObjectHideFlags: 0
@@ -1210,7 +1211,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1222286114}
   - component: {fileID: 1222286115}
-  - component: {fileID: 1222286117}
+  - component: {fileID: 1222286118}
   m_Layer: 0
   m_Name: Board
   m_TagString: Untagged
@@ -1285,7 +1286,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &1222286117
+--- !u!114 &1222286118
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1294,17 +1295,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1222286112}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c570eeb6ba1d2414db62b24cfa95c4b4, type: 3}
+  m_Script: {fileID: 11500000, guid: 9378e25646c58c44bb3387d24b7cb9df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   tilePrefab: {fileID: 2231202199086846715, guid: 2bf3b40fd648a5743be7073ec7d3d06a, type: 3}
-  tileSize: {x: 0, y: 0}
-  boardSize: {x: 0, y: 0}
-  numTilesX: 4
-  numTilesY: 4
-  numTiles: 0
-  numberMines: 2
-  mineArray: []
+  tileArraySize: {x: 10, y: 10}
+  numTotalMines: 10
   numFlags: 0
 --- !u!1 &1275394234
 GameObject:

@@ -33,19 +33,20 @@ public class MenuController : MonoBehaviour {
 
 	void StartGame() {
 		// Get input values
-		int x = int.Parse(XInput.text);
-		int y = int.Parse(YInput.text);
+		int numTilesX = int.Parse(XInput.text);
+		int numTilesY = int.Parse(YInput.text);
 		int numMines = int.Parse(NumInput.text);
 
 		// Check if input is valid
-		if (x * y <= numMines) {
+		if (numTilesX * numTilesY <= numMines) {
 			Debug.Log("invalid input");
+			// Flash error text
 			StartCoroutine(errorFunc());
 		} else {
 			// Start game
-			Debug.Log("Starting game with x: " + x + ", y: " + y + ", num: " + numMines);
-			PlayerPrefs.SetInt("x", x);
-			PlayerPrefs.SetInt("y", y);
+			Debug.Log("Starting game with x: " + numTilesX + ", y: " + numTilesY + ", num: " + numMines);
+			PlayerPrefs.SetInt("numTilesX", numTilesX);
+			PlayerPrefs.SetInt("numTilesY", numTilesY);
 			PlayerPrefs.SetInt("numMines", numMines);
 			SceneManager.LoadScene("game", LoadSceneMode.Single);
 		}
